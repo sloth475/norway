@@ -111,15 +111,14 @@ def extract_respiration(string):
                 print(line)
                 
 def extract_age(string):
-    x = ' '.join([i for i in string.split() if i in years])
-    for i in years:
-        #age=re.findall(r'(\d+).*(i)?,string)
-     #   age=re.findall(r'(\d+).*(i)?,string)
-        #print(age)
-        
-        age=re.findall(r"\b\'years'(?!%)[^\d]", string)
-        print(age)
-        
+    age=re.findall(r'\s\d[1-9] \w*[y]+',string)
+    age1=re.findall(r'\:\d[1-9] \w*[y,e,a,r,s,o,Y]',string)
+    age1.append(age)
+    print(age1)
+    for item in age:
+        for line in re.findall(r'\d+ \w*[y,e,a,r,s,o,Y]',item):
+            print(line)
+      
         
       
     
@@ -134,3 +133,15 @@ if __name__ == '__main__':
     #DBP=extract_diastolicBP(string)
     #R=extract_respiration(string)
     #A=extract_age(string)
+    def extract_age(string):
+    age=re.findall(r'\s\d[1-9] \w*[y]+',string)
+    age1=re.findall(r'\:\d[1-9] \w*[y,e,a,r,s,o,Y]',string)
+    age1.append(age)
+    print(age1)
+    for item in age:
+        for line in re.findall(r'\d+ \w*[y,e,a,r,s,o,Y]',item):
+            print(line)
+               
+
+
+               
