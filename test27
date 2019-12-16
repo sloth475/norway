@@ -1,0 +1,30 @@
+fh = open('sampledata.txt')
+# use readline() to read the first line 
+line = fh.readline()
+# use the read line to read further.
+# If the file is not empty keep reading one line
+# at a time, till the file is empty
+while line:
+    dict2={ }
+    # in python 2+
+    # print line
+    # in python 3 print is a builtin function, so
+    #print(line)
+    
+    h=[]
+    height = re.match("Height.......", line)
+    if height == []:
+        height='nA'
+        dict2["height"] = 'na'
+    else: 
+        
+        for item in height:
+            
+            for line in re.match(r'\d+\s+\w{2}', item):
+                h.append(line)
+            dict2["height"] =h
+  
+    
+    # use realine() to read next line
+    line = fh.readline()
+    print(dict2)
