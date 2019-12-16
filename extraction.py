@@ -1,9 +1,12 @@
 
+import pandas as pd
+import re
+
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger')
 #nltk.download('maxent_ne_chunker')
 #nltk.download('words')
-stop = stopwords.words('english')
+#stop = stopwords.words('english')
 
 fh=open(r'datain.txt','r').read()
 years=["years","yrs","yr","yo","Ys","ys"]
@@ -69,79 +72,102 @@ s:57 yr old white m librarian presents today for wellness exam. he has a history
 
 
 def extract_height(string):
+    h=[]
     height = re.findall("Height.......", string)
     for item in height:
         for line in re.findall(r'\d+\s+\w{2}', item):
-                print(line)
+                h.append(line)
+        dict1["height"] =h
+        
+    #print(len())
                 
 def extract_weight(string):
+    w=[]
     weight = re.findall("Weight........",string)
     for item in weight:
         for line in re.findall('\d*\.?\d+\s\w{2}',item):
-                print(line)
+            w.append(line)
+        dict1['weight'] = w
+    #print(dict1)
                 
 def extract_temp(string):
+    t=[]
     temp = re.findall("Temperature.......",string)
     for item in temp:
         for line in re.findall('\d*\.?\d+\s\w',item):
-                print(line)
+            t.append(line)
+        dict1['temperature'] = t
+    #print(dict1)
+                
                 
 def extract_pulse(string):
+    p=[]
     pulse = re.findall("Pulse...",string)
     for item in pulse:
         for line in re.findall('\d+',item):
-                print(line)
+            p.append(line)
+        dict1['pulse'] = p
+    #print(dict1)
+                
                 
 def extract_systolicBP(string):
+    s=[]
     bp1 = re.findall("SystolicBP....",string)
     for item in bp1:
         for line in re.findall('\d+',item):
-                print(line)
+            s.append(line)
+        dict1['systolicBP'] = s
+    #print(dict1)
 
 def extract_diastolicBP(string):
+    d=[]
     bp2 = re.findall("DiastolicBP....",string)
     for item in bp2:
         for line in re.findall('\d+',item):
-                print(line)
+            d.append(line)
+        dict1['diastolicBP'] = d
+    #print(dict1)           
+              
 
 def extract_respiration(string):
+    r=[]
     resp = re.findall("Respiration...",string)
+    
     for item in resp:
         for line in re.findall('\d+',item):
-                print(line)
+            r.append(line)
+        dict1['respiration'] = r
+    #print(dict1)
+            
                 
 def extract_age(string):
+    age9=[]
     age=re.findall(r'\s\d[1-9] \w*[y]+',string)
     age1=re.findall(r'\:\d[1-9] \w*[y,e,a,r,s,o,Y]',string)
-    age1.append(age)
-    print(age1)
-    for item in age:
-        for line in re.findall(r'\d+ \w*[y,e,a,r,s,o,Y]',item):
-            print(line)
-      
-        
-      
+    for i in age1:        
+        p,ag=i.split(":" or ' ')
+        age9.append(ag)
     
-    
-if __name__ == '__main__':
+    #for item in (age+age9):
+    dict1["age"] = age9+age
+    #print(dict1)               
+
+if __name__ == "__main__":
+    dict1={ }
+              
+               
+
     
     H=extract_height(string)
-    #W=extract_weight(string)
-    #T=extract_temp(string)
-    #P=extract_pulse(string)
-    #SBP=extract_systolicBP(string)
-    #DBP=extract_diastolicBP(string)
-    #R=extract_respiration(string)
-    #A=extract_age(string)
-    def extract_age(string):
-    age=re.findall(r'\s\d[1-9] \w*[y]+',string)
-    age1=re.findall(r'\:\d[1-9] \w*[y,e,a,r,s,o,Y]',string)
-    age1.append(age)
-    print(age1)
-    for item in age:
-        for line in re.findall(r'\d+ \w*[y,e,a,r,s,o,Y]',item):
-            print(line)
-               
-
-
-               
+    W=extract_weight(string)
+    T=extract_temp(string)
+    P=extract_pulse(string)
+    SBP=extract_systolicBP(string)
+    DBP=extract_diastolicBP(string)
+    R=extract_respiration(string)
+    A=extract_age(string)
+    #print(dict1)
+    data=dict1
+    df=pd.DataFrame(data)
+    print(df)
+    #df
