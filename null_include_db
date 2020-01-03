@@ -1,0 +1,33 @@
+import re
+#import pandas as pd
+filepath = 'sampledata.txt'
+
+with open(filepath) as fp:
+    line = fp.readline()
+    found=False
+    dict1={}
+    lod=[]
+    cnt = 1
+    h=[]
+    while line:
+        if "Height" in line:
+             
+            found=True          
+            height = re.findall("Height.......", line)
+            for item in height:
+                for line in re.findall(r'\d+\s+\w{2}', item):
+                    h.append(line)
+                dict1["height"] =h  
+        else:
+            found=False
+            dict1["height"]=['NA']
+    
+        for i,j in dict1.items():
+            lod.append(j)
+    print(dict1)
+    line = fp.readline()
+    cnt += 1
+#print(lod)
+#data=lod
+#df=pd.DataFrame(data)
+#print(df)
