@@ -1,0 +1,218 @@
+import re
+import pandas as pd
+filepath = 'sampledataIN.txt'
+
+def extract_height(line):
+    
+    if "Height" in line:
+        
+        found=True
+            #print(found)
+        height = re.findall("Height.......", line)
+        for item in height:
+            for l in re.findall(r'\d+\s+\w{2}', item):
+                h.append(l)
+    else:
+        
+        found=False
+        h.append('NA')
+    return h
+        
+    
+def extract_weight(line):
+    W=[]
+    if "Weight" in line:
+        found=True
+        weight= re.findall("Weight........",line)
+        for item in weight:
+            for l in re.findall('\d*\.?\d+\s\w{2}',item):
+                w.append(l)
+    else:
+        found=False
+        w.append('NA')
+    
+    return w
+
+def extract_temp(line):
+    if "Temperature" in line:
+        found=True
+        temp= re.findall("Temperature.......",line)
+        for item in temp:
+            for l in re.findall('\d*\.?\d+\s\w',item):
+                t.append(l)
+    else:
+        found=False
+        t.append('NA')
+    return t 
+
+
+def extract_pulse(line):
+    if "Pulse" in line:
+        found=True
+        pulse= re.findall("Pulse...",line)
+        for item in pulse:
+            for l in re.findall('\d+',item):
+                p.append(l)
+    else:
+        found=False
+        p.append('NA')
+    return p
+
+
+def extract_systolicBP(line):
+    if "SystolicBP" in line:
+        found=True
+        sys= re.findall("SystolicBP....",line)
+        for item in sys:
+            for l in re.findall('\d+',item):
+                s.append(l)
+    else:
+        found=False
+        s.append('NA')
+    return s
+
+
+def extract_diastolicBP(line):
+    if "DiastolicB" in line:
+        found=True
+        dys= re.findall("DiastolicBP....",line)
+        for item in dys:
+            for l in re.findall('\d+',item):
+                d.append(l)
+    else:
+        found=False
+        d.append('NA')
+    return d 
+
+
+def extract_respiration(line):
+    if "Respiration" in line:
+        found=True
+        resp= re.findall("Respiration...",line)
+        for item in resp:
+            for l in re.findall('\d+',item):
+                r.append(l)
+    else:
+        found=False
+        r.append('NA')
+    return r
+
+
+def extract_age(line):
+    dict2={}
+    
+    if line != '\n':
+
+        #print("newline:")
+        age9=[]
+        
+        age=re.findall(r'\s\d[1-9] \w*[y]+',line)
+        #print("age:",age)
+        age2=re.findall(r'\s\d[1-9] \w*[Y]+',line)
+        #print("age2:",age2)
+        #if len(age2)>2:
+        age=age+age2
+        #age.append(age2)
+        #print("age:",age)
+        dict2["age"] = age
+        #print('len',len(age))
+        if len(age)<2:
+
+            age1=re.findall(r'\:\d[1-9] \w*[y,e,a,r,s,o,Y]',line)
+            #print("age1:",age1)
+            for i in age1: 
+                #print("i:",i)
+                p,ag=i.split(":" or ' ')
+                age9.append(ag)
+                #print("age9:",age9)
+                #print("age9+age:",age9+age)
+                dict2["age"] = age9+age
+            age=age9+age
+            #print("dict2::",dict2) 
+            #a.append(ag)
+            #a+age
+        #else:
+     #   found=False
+      #  a.append('NA')
+    #print(dict1)   
+    else:
+        dict2["age"] =['NA']
+        
+    for i,v in dict2.items():
+        if not v[0]:
+            pass
+        else:
+            a.append(v[0])
+            
+    return a
+
+
+def extract_sex(line):
+    f=["female"," male","Male","Female"," f "," F "," m ",":M "," M "]
+    
+    dict2={}
+    female=[]
+    if line != '\n':
+        for i in f:
+            x=re.search(i,line)
+            if x:
+                female=x.group()
+                sex.append(female)
+    else:
+        sex.append('NA')
+            
+    return sex
+
+
+        
+
+with open(filepath) as fp:
+    
+    line = fp.readline()
+    cnt = 1
+    x=[0]
+    h=[]
+    w=[]
+    t=[]
+    p=[]
+    s=[]
+    d=[]
+    r=[]
+    a=[]
+    sex=[]
+    dict1={}
+    found=False
+    lod=[]
+    while line:
+        #dict1["Weight"]=extract_weight(line)
+    
+        #dict1["Height"]=extract_height(line)
+        dict1["Weight"]=extract_weight(line)
+        dict1["Temp"]=extract_temp(line)
+        dict1["Pulse"]=extract_pulse(line)
+        dict1["SystolicBP"]=extract_systolicBP(line)
+        dict1["DiastolicBP"]=extract_diastolicBP(line)
+        dict1["Respiration"]=extract_respiration(line)
+        dict1["Age"]=extract_age(line)
+    
+        dict1["Sex"]=extract_sex(line)
+           
+        line = fp.readline()
+        cnt += 1
+
+data=dict1
+df=pd.DataFrame(data)
+print(df)
+
+******************************************************************************
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create data
+plt.xlabel('age')
+plt.ylabel('pulse')
+#df.loc[:,"SystolicBP"].mean()
+
+plt.scatter(df.Age, df.Pulse)
+**************************************************************************
