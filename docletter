@@ -1,0 +1,44 @@
+import re
+import pandas as pd
+import os
+import glob  
+ 
+path = r'D:\ras\Scripts\textfolder\*.txt' 
+files=glob.glob(path)  
+fn1=[]
+dict1={}
+word=""
+for name in files:
+    print("file:: ",name)
+    
+    try:
+        with open(name,'r') as fh:
+            f=fh.read()
+            #match=re.findall(/(?:Name|https?)[^\s]+/gi)
+            for line in re.findall("Name:.*",f):
+                print("line:",line)
+                
+                #for lines in re.findall('',line):
+                 #   print("lines",lines)
+                
+                """e,fn=lines.split(":")
+                print(fn)
+                type(fn)
+                fn1.append(fn)
+                print(fn1)
+                """
+            #dict1['name']=fn1
+           
+
+
+
+    except IOError as exc:
+        print("err")
+        if exc.errno != errno.EISDIR:
+            raise
+   
+
+
+
+
+    
