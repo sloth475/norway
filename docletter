@@ -1,35 +1,202 @@
 import re
 import pandas as pd
 import os
-import glob  
- 
+import glob 
+
+import csv
+
+
 path = r'D:\ras\Scripts\textfolder\*.txt' 
 files=glob.glob(path)  
 fn1=[]
+fn2=[]
+fn3=[]
+fn4=[]
+fn5=[]
+fn6=[]
+fn7=[]
+fn8=[]
+fn9=[]
+fn10=[]
+fn11=[]
+fn12=[]
+fn13=[]
+fn14=[]
+fn15=[]
 dict1={}
-word=""
+ques=['name','date of birth','Customer informs about previous use of marijuana','Describe medical history, types of drugs and the period of use','The underlying cause','Treatment','High consumption / over-consumption of alcohol or drugs?',
+      'Status Presence? When the customer used drugs last one','Place date','doc name','org no','address and post code',
+      'General practitioner stated by the customer in the acknowledgment','Medical center stated by the customer in the statement']
+def extract_name(f):
+    f=re.search("Name:.*",f)
+    p=(f.group())
+    
+    p=p.split(':')[1]
+    
+    fn1.append(p)
+    #print(fn1[0])
+        #print(line)              
+        #p=(line.split(':')[1])
+        #p1=(p.split("  ")[0])
+        #print(p1)
+        
+        #fn1.append(p1)
+    return fn1
+
+def extract_DOB(f):
+    for line in re.findall("Date of birth:.*",f):
+        #print(line)
+        p=(line.split(':')[1])
+        #print(p)
+        fn12.append(p)
+    return fn12
+
+def extract_ques1(f):
+    for line in re.findall("Customer informs about previous use of marijuana:.*",f):
+        #print(line)
+        p=(line.split(':')[1])
+        #print(p)
+        fn2.append(p)
+    return fn2
+
+def extract_ques2(f):
+    for line in re.findall(" Describe medical history, types of drugs and the period of use.*",f):
+        #print(line)
+        p=(line.split('.')[1])
+        #print(p)
+        fn3.append(p)
+    return fn3
+    
+
+def extract_ques3(f):
+    for line in re.findall(" The underlying cause?.*",f):
+        #print(line)
+        p=(line.split('?')[1])
+        #print(p)
+        fn4.append(p)
+    return fn4
+
+def extract_ques4(f):
+    #print(f)
+    #print(re.findall("Treatment (please describe)?.*",f))
+    for lines in re.findall("3. Treatment.*",f):
+        
+        #print("yes",lines)
+        p=(lines.split('?')[1])
+        #print("p",p)
+        fn5.append(p)
+        #print(fn5)
+    return fn5
+
+def extract_ques5(f):
+    #print("1")
+    for line in re.findall("4. High consumption / over-consumption of alcohol or drugs?.*",f):
+        #print("2",line)
+        p=(line.split('?')[1])
+        #print("3",p)
+        fn6.append(p)
+    return fn6
+    
+    
+def extract_ques6(f):
+   
+    for line in re.findall("When the customer used drugs last one...........",f):
+        p=(line.split('.')[1])
+        fn7.append(p)
+    for line in re.findall("Status Presence .*",f):
+        print(line)
+        fn15.append(line)
+        
+    return fn7,fn15
+
+def extract_ques7(f):
+    #print("1")
+    for line in re.findall("Place date:.*",f):
+        #print("2",line)
+        p=(line.split(':')[1])
+        #print("3",p)
+        fn8.append(p)
+    return fn8
+
+def extract_ques8(f):
+    #print("1")
+    for line in re.findall("Doctor's signature and stamp:.*",f):
+        #print("2")
+        p=(line.split('.')[1])
+        #print("3",p)
+        fn9.append(p)
+    return fn9
+
+def extract_ques9(f):
+    #`print("1")
+    for line in re.findall("Org number:.*",f):
+        #print("2")
+        p=(line.split(':')[1])
+        #print("3",p)
+        fn10.append(p)
+    return fn10
+
+def extract_ques10(f,fh):
+    #print("1",fh)
+    for line in re.findall("Address:.*",f):
+        p=(line.split(':')[1]) 
+       # print("2",p)
+            
+        fn11.append(p)
+        for line in re.findall("Postcode:.*",f):
+            p=line.split(':')[1]
+            fn11.append(p)
+       
+    
+    return fn11
+
+def extract_ques11(f):
+    #`print("1")
+    for line in re.findall("General practitioner stated by the customer in the acknowledgment:.*",f):
+        #print("2")
+        p=(line.split(':')[1])
+        #print("3",p)
+        fn13.append(p)
+    return fn13
+def extract_ques12(f):
+    #`print("1")
+    for line in re.findall("Medical center stated by the customer in the statement:.*",f):
+        #print("2")
+        p=(line.split(':')[1])
+        #print("3",p)
+        fn14.append(p)
+    return fn14
+
+
 for name in files:
     print("file:: ",name)
     
     try:
         with open(name,'r') as fh:
             f=fh.read()
-            #match=re.findall(/(?:Name|https?)[^\s]+/gi)
-            for line in re.findall("Name:.*",f):
-                print("line:",line)
-                
-                #for lines in re.findall('',line):
-                 #   print("lines",lines)
-                
-                """e,fn=lines.split(":")
-                print(fn)
-                type(fn)
-                fn1.append(fn)
-                print(fn1)
-                """
-            #dict1['name']=fn1
+            dict1['name']=extract_name(f)[0]           #pt name
+            dict1['DOB']=extract_DOB(f)           
+            dict1["ques1"]=extract_ques1(f)         #Customer informs about previous use of marijuana
+            dict1["ques2"]=extract_ques2(f)         #Describe medical history, types of drugs and the period of use
+            dict1["ques3"]=extract_ques3(f)         #The underlying cause
+        
+            dict1["ques4"]=extract_ques4(f)         #Treatment (please describe)?
+            dict1["ques5"]=extract_ques5(f)         #High consumption / over-consumption of alcohol or drugs?
+            dict1["ques6"],dict1["soap notes"]=extract_ques6(f) 
+                                                   #Status Presence? When the customer used drugs last one
+            dict1["ques7"]=extract_ques7(f)         #Place date:
+            dict1["ques8"]=extract_ques8(f)         #doc name 
+            dict1["ques9"]=extract_ques9(f)         #org no
+            dict1["ques10"]=extract_ques10(f,name)  #address and post code
+            dict1["ques11"]=extract_ques11(f)       #General practitioner stated by the customer in the acknowledgment
+            dict1["ques12"]=extract_ques12(f)       #Medical center stated by the customer in the statement
+            #print(dict1)
+            #dict1["questions"]=ques
+            #print(dict1)
+ 
+            
            
-
+              
 
 
     except IOError as exc:
@@ -38,7 +205,15 @@ for name in files:
             raise
    
 
+    with open('output.csv', 'w') as output:
+        writer = csv.writer(output)
+        for key, value in dict1.items():
+            #print("ksdhfjf",value)
+            # Join all the strings in list
+            fullStr = ' '.join(value) 
+            writer.writerow([key,fullStr])
+        #for i in ques:
+         #  print(i)
+          #   writer.writerow(i)
+            #writer.writerow(ques)
 
-
-
-    
